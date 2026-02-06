@@ -1,3 +1,4 @@
+// URL 파라미터를 사용하기 위한 훅
 import { useParams } from "react-router-dom";
 
 const Diary = () => {
