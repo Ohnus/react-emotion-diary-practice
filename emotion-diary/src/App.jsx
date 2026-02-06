@@ -14,6 +14,7 @@ import New from "./pages/New.jsx";
 import Diary from "./pages/Diary.jsx";
 import Notfound from "./pages/Notfound.jsx";
 import Button from "./components/Button.jsx";
+import Header from "./components/Header.jsx";
 
 import { getEmotionImage } from "./util/get-emotion-image.js";
 
@@ -22,13 +23,6 @@ import { getEmotionImage } from "./util/get-emotion-image.js";
 // 2. "/new": 새로운 일기를 작성하는 New 페이지
 // 3. "/diary": 일기를 상세히 조회하는 Diary 페이지
 function App() {
-  const nav = useNavigate();
-
-  // 링크가 아닌 특정 조건에서 페이지 이동해야 할 경우 nav 사용
-  const onClickButton = () => {
-    nav("/new");
-  };
-
   return (
     // Routes 컴포넌트 내에 Route 컴포넌트로 각 페이지 컴포넌트 설정
     // 요청한 경로와 동일한 path prop을 위에서부터 아래로 찾는다.
@@ -37,10 +31,35 @@ function App() {
     // Routes 컴포넌트 안에는 Route 컴포넌트만 들어갈 수 있다.
     // Routes 컴포넌트 밖의 요소는 Routes 안의 모든 페이지에서 렌더링된다.
     <>
+      <Header
+        title={"Header"}
+        leftChild={<Button text={"<"} />}
+        rightChild={<Button text={">"} />}
+      />
+      <Button
+        text={"123"}
+        onClick={() => {
+          console.log("123 클릭");
+        }}
+      />
+      <Button
+        text={"123"}
+        type={"POSITIVE"}
+        onClick={() => {
+          console.log("123 클릭");
+        }}
+      />
+      <Button
+        text={"123"}
+        type={"NEGATIVE"}
+        onClick={() => {
+          console.log("123 클릭");
+        }}
+      />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/new" element={<New />} />
-        <Route path="/diary" element={<Diary />} />
+        <Route path="/diary/:id" element={<Diary />} />
         <Route path="*" element={<Notfound />} />
       </Routes>
     </>
