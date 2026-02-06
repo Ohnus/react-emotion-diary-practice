@@ -105,28 +105,6 @@ function App() {
     // Routes 컴포넌트 안에는 Route 컴포넌트만 들어갈 수 있다.
     // Routes 컴포넌트 밖의 요소는 Routes 안의 모든 페이지에서 렌더링된다.
     <>
-      <button
-        onClick={() => {
-          onCreate(new Date().getTime(), 1, "Hello");
-        }}
-      >
-        일기 추가 테스트
-      </button>
-      <button
-        onClick={() => {
-          onUpdate(1, new Date().getTime(), 3, "Bye");
-        }}
-      >
-        일기 수정 테스트
-      </button>
-      <button
-        onClick={() => {
-          onDelete(3);
-        }}
-      >
-        일기 삭제 테스트
-      </button>
-
       <DiaryStateContext.Provider value={data}>
         <DiaryDispatchContext.Provider
           value={{
