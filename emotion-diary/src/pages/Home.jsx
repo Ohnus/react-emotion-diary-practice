@@ -3,6 +3,7 @@ import { DiaryStateContext } from "../App";
 import Header from "../components/Header";
 import Button from "../components/Button";
 import DiaryList from "../components/DiaryList";
+import usePageTitle from "../hooks/usePageTitle";
 
 const getMonthlyData = (pivotDate, data) => {
   // 현재 날짜의 시작일과 말일 사이의 데이터를 필터하는 방법
@@ -45,6 +46,8 @@ const Home = () => {
   // pivotDate: 현재 일기의 기준이 되는 날짜
   const [pivotDate, setPivotDate] = useState(new Date());
   const monthlyData = getMonthlyData(pivotDate, data);
+
+  usePageTitle("감정 일기장");
 
   const onIncreaseMonth = () => {
     setPivotDate(

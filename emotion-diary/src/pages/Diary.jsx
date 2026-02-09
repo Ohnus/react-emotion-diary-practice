@@ -4,10 +4,13 @@ import Header from "./../components/Header";
 import Button from "./../components/Button";
 import Viewer from "./../components/Viewer";
 import { getStringedDate } from "../util/get-stringed-date";
+import usePageTitle from "../hooks/usePageTitle";
 
 const Diary = () => {
   const nav = useNavigate();
   const params = useParams();
+
+  usePageTitle(`${params.id}번 일기`);
 
   // useEffect 활용한 커스텀 훅
   // useDiary에서 state가 빈 값이므로 undefined
