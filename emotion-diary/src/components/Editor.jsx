@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "./Button";
 import "./Editor.css";
 import EmotionItem from "./EmotionItem";
-import { DiaryDispatchContext } from "../App";
 
 const emotionList = [
   {
@@ -40,13 +39,24 @@ const getStringedDate = (targetDate) => {
   return `${year}-${month}-${date}`;
 };
 
-const Editor = ({ onSubmit }) => {
+const Editor = ({ initData, onSubmit }) => {
   const nav = useNavigate();
   const [input, setInput] = useState({
     createdDate: new Date(),
     emotionId: 1,
     content: "",
   });
+
+  // 생성 시에는 initData 변경 없으므로 작동 x
+  // 수정 시 들어온 initData를 감지하여 마운트 이후에 setInput 업데이트
+  useEffect(() => {
+    if (initData) {
+      setInput({
+        ...initData,
+        createdDate: new Date(Number(initData.createdDate)),
+      });
+    }
+  }, [initData]);
 
   const onChangeInput = (e) => {
     let name = e.target.name;
