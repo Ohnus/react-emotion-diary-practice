@@ -1,5 +1,12 @@
 import "./App.css";
-import { useReducer, useRef, createContext, useMemo } from "react";
+import {
+  useReducer,
+  useRef,
+  createContext,
+  useMemo,
+  useEffect,
+  useState,
+} from "react";
 // 경로로 페이지에 접근하기 위해 Routes, Route 컴포넌트 호출
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home.jsx";
@@ -18,59 +25,78 @@ import { getEmotionImage } from "./util/get-emotion-image.js";
 // 2. "/new": 새로운 일기를 작성하는 New 페이지
 // 3. "/diary": 일기를 상세히 조회하는 Diary 페이지
 
-const mockData = [
-  {
-    id: 1,
-    createdDate: new Date("2025-01-31").getTime(),
-    emotionId: 1,
-    content: "1번 일기 내용",
-  },
-  {
-    id: 2,
-    createdDate: new Date("2026-01-31").getTime(),
-    emotionId: 2,
-    content: "2번 일기 내용",
-  },
-  {
-    id: 3,
-    createdDate: new Date("2026-02-06").getTime(),
-    emotionId: 3,
-    content: "3번 일기 내용",
-  },
-  {
-    id: 4,
-    createdDate: new Date("2026-02-07").getTime(),
-    emotionId: 4,
-    content: "4번 일기 내용",
-  },
-];
-
 function reducer(state, action) {
+  let nextState;
+
   switch (action.type) {
-    case "CREATE":
-      return [action.data, ...state];
-    case "UPDATE":
-      return state.map((item) =>
+    // 어차피 localStorage에서 불러 온 값이므로 nextState에 담을 필요 x
+    case "INIT":
+      return action.data;
+    case "CREATE": {
+      nextState = [action.data, ...state];
+      break;
+    }
+    case "UPDATE": {
+      nextState = state.map((item) =>
         String(item.id) === String(action.data.id)
           ? action.data
           : item
       );
-    case "DELETE":
-      return state.filter(
+      break;
+    }
+    case "DELETE": {
+      nextState = state.filter(
         (item) => String(item.id) !== String(action.id)
       );
+      break;
+    }
     default:
       return state;
   }
+
+  localStorage.setItem("diary", JSON.stringify(nextState));
+  return nextState;
 }
 
 export const DiaryStateContext = createContext();
 export const DiaryDispatchContext = createContext();
 
 function App() {
-  const [data, dispatch] = useReducer(reducer, mockData);
+  // useEffect로 인해 자식 컴포넌트들이 빈 state 받는 것 방지하는 로딩
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, dispatch] = useReducer(reducer, []);
   // 후위 연산이므로 객체 마지막 id + 1을 기본 값으로
-  const idRef = useRef(5);
+  const idRef = useRef(0);
+
+  // 앱 컴포넌트 마운트 되고 나서 localStorage에서 불러와서 data 초기값 설정
+  useEffect(() => {
+    const storedData = localStorage.getItem("diary");
+    if (!storedData) {
+      setIsLoading(false);
+      return;
+    }
+
+    const parsedData = JSON.parse(storedData);
+    if (!Array.isArray(parsedData)) {
+      setIsLoading(false);
+      return;
+    }
+
+    let maxId = 0;
+    parsedData.forEach((item) => {
+      if (Number(item.id) > maxId) {
+        maxId = Number(item.id);
+      }
+    });
+
+    idRef.current = maxId + 1;
+
+    dispatch({
+      type: "INIT",
+      data: parsedData,
+    });
+    setIsLoading(false);
+  }, []);
 
   // 새로운 일기 추가
   const onCreate = (createdDate, emotionId, content) => {
@@ -109,6 +135,11 @@ function App() {
   const memoizedData = useMemo(() => {
     return { onCreate, onUpdate, onDelete };
   }, []);
+
+  // 로딩
+  if (isLoading) {
+    return <div>데이터 로딩중 입니다..</div>;
+  }
 
   return (
     // Routes 컴포넌트 내에 Route 컴포넌트로 각 페이지 컴포넌트 설정
