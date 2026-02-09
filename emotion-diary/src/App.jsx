@@ -69,7 +69,8 @@ export const DiaryDispatchContext = createContext();
 
 function App() {
   const [data, dispatch] = useReducer(reducer, mockData);
-  const idRef = useRef(3);
+  // 후위 연산이므로 객체 마지막 id + 1을 기본 값으로
+  const idRef = useRef(5);
 
   // 새로운 일기 추가
   const onCreate = (createdDate, emotionId, content) => {

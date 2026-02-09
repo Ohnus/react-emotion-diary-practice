@@ -24,20 +24,19 @@ const DiaryList = ({ data }) => {
       }
     });
   };
-
+  const element = <h1>Hello</h1>;
   const sortedData = getSortedData();
 
   return (
     <div className="DiaryList">
+      {element}
       <div className="menu_bar">
         <select onChange={onChangeSortType}>
           <option value={"latest"}>최신순</option>
           <option value={"oldest"}>오래된 순</option>
         </select>
         <Button
-          onClick={() => {
-            nav("/new");
-          }}
+          onClick={() => nav("/new")}
           text={"새 일기 쓰기"}
           type={"POSITIVE"}
         />
