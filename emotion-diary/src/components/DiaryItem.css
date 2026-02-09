@@ -55,6 +55,9 @@
 
 .DiaryItem .info_section .content {
   font-size: 18px;
+  /* 단어 사이에 공백이 없어도 무조건 자름 */
+  word-break: break-all;
+  overflow-wrap: break-word;
 }
 
 /* 버튼 섹션 */

@@ -24,12 +24,10 @@ const DiaryList = ({ data }) => {
       }
     });
   };
-  const element = <h1>Hello</h1>;
   const sortedData = getSortedData();
 
   return (
     <div className="DiaryList">
-      {element}
       <div className="menu_bar">
         <select onChange={onChangeSortType}>
           <option value={"latest"}>최신순</option>
