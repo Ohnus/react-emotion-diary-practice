@@ -58,6 +58,8 @@
   /* 단어 사이에 공백이 없어도 무조건 자름 */
   word-break: break-all;
   overflow-wrap: break-word;
+  /* 엔터 기준 줄 바꿈 */
+  white-space: pre-line;
 }
 
 /* 버튼 섹션 */

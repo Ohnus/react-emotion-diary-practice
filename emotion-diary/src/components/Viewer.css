@@ -52,6 +52,8 @@
   /* 내용이 너무 길더라도 자연스럽게 줄바꿈하도록 */
   word-break: keep-all;
   overflow-wrap: break-word;
+  /* 엔터 줄 바꿈 */
+  white-space: pre-line;
 }
 
 .Viewer .content_wrapper > p {
